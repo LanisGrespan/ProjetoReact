@@ -1,146 +1,74 @@
-import { Image, StyleSheet, Platform, Text, View, TextInput, Picker } from 'react-native';
+import { Image, StyleSheet, Platform, Text } from 'react-native';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { FlatList } from 'react-native-gesture-handler';
+
+import { HelloWave } from '@/components/HelloWave';
+import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
 export default function HomeScreen() {
-  const [itens, setItens] = useState([]);
-  const [filteredItens, setFilteredItens] = useState([]);
-  const [finalidade, setFinalidade] = useState('');
-  const [tipo, setTipo] = useState('');
-  const [valorMin, setValorMin] = useState('');
-  const [valorMax, setValorMax] = useState('');
-  const [areaTerreno, setAreaTerreno] = useState('');
-  const [areaConstruida, setAreaConstruida] = useState('');
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get('http://127.0.0.1:8000/itens');
-      setItens(response.data);
-      setFilteredItens(response.data); // Iniciar com todos os itens carregados
-    };
-    fetchData();
-  }, []);
-
-  // Função para aplicar os filtros
-  const applyFilters = () => {
-    let filtered = itens;
-    if (finalidade) {
-      filtered = filtered.filter(item => item.finalidade === finalidade);
-    }
-    if (tipo) {
-      filtered = filtered.filter(item => item.tipo === tipo);
-    }
-    if (valorMin) {
-      filtered = filtered.filter(item => parseFloat(item.valor_venda) >= parseFloat(valorMin));
-    }
-    if (valorMax) {
-      filtered = filtered.filter(item => parseFloat(item.valor_venda) <= parseFloat(valorMax));
-    }
-    if (areaTerreno) {
-      filtered = filtered.filter(item => parseFloat(item.area_terreno) >= parseFloat(areaTerreno));
-    }
-    if (areaConstruida) {
-      filtered = filtered.filter(item => parseFloat(item.area_construida) >= parseFloat(areaConstruida));
-    }
-    setFilteredItens(filtered);
-  };
-
   return (
-    <View style={{ flex: 1, padding: 10 }}>
-      {/* Filtros */}
-      <View style={styles.filterContainer}>
-        <Picker selectedValue={finalidade} onValueChange={(value) => setFinalidade(value)}>
-          <Picker.Item label="Selecione a finalidade" value="" />
-          <Picker.Item label="Venda" value="VENDA" />
-          <Picker.Item label="Locação" value="LOCACAO" />
-          <Picker.Item label="Temporada" value="TEMPORADA" />
-        </Picker>
-
-        <Picker selectedValue={tipo} onValueChange={(value) => setTipo(value)}>
-          <Picker.Item label="Selecione o tipo" value="" />
-          <Picker.Item label="Casa" value="CASA" />
-          <Picker.Item label="Apartamento" value="APARTAMENTO" />
-          <Picker.Item label="Terreno" value="TERRENO" />
-          <Picker.Item label="Sala" value="SALA" />
-          <Picker.Item label="Barracão" value="BARRACAO" />
-          <Picker.Item label="Rancho" value="RANCHO" />
-          <Picker.Item label="Chácara" value="CHÁCARA" />
-        </Picker>
-
-        <TextInput
-          placeholder="Valor mínimo"
-          keyboardType="numeric"
-          value={valorMin}
-          onChangeText={(text) => setValorMin(text)}
-          style={styles.input}
+    <ParallaxScrollView
+      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerImage={
+        <Image
+          source={require('@/assets/images/doguinho.png')}
+          style={styles.reactLogo}
+          resizeMode="cover"
         />
-
-        <TextInput
-          placeholder="Valor máximo"
-          keyboardType="numeric"
-          value={valorMax}
-          onChangeText={(text) => setValorMax(text)}
-          style={styles.input}
-        />
-
-        <TextInput
-          placeholder="Metragem do terreno"
-          keyboardType="numeric"
-          value={areaTerreno}
-          onChangeText={(text) => setAreaTerreno(text)}
-          style={styles.input}
-        />
-
-        <TextInput
-          placeholder="Área construída"
-          keyboardType="numeric"
-          value={areaConstruida}
-          onChangeText={(text) => setAreaConstruida(text)}
-          style={styles.input}
-        />
-
-        <Text onPress={applyFilters} style={styles.applyButton}>Aplicar Filtros</Text>
-      </View>
-
-      {/* Lista de imóveis filtrados */}
-      <FlatList
-        data={filteredItens}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <ThemedView>
-            <Image source={{ uri: item.imagem }} style={{ width: 100, height: 100 }} />
-            <Text>{item.nome}</Text>
-            <Text>Finalidade: {item.finalidade}</Text>
-            <Text>Tipo: {item.tipo}</Text>
-            <Text>Valor Venda: R$ {item.valor_venda}</Text>
-            <Text>Área Terreno: {item.area_terreno} m²</Text>
-            <Text>Área Construída: {item.area_construida} m²</Text>
-          </ThemedView>
-        )}
-      />
-    </View>
+      }>
+      <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title">Doguinho</ThemedText>
+        <HelloWave />
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
+        <ThemedText>
+          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
+          Press{' '}
+          <ThemedText type="defaultSemiBold">
+            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
+          </ThemedText>{' '}
+          to open developer tools.
+        </ThemedText>
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
+        <ThemedText>
+          Tap the Explore tab to learn more about what's included in this starter app.
+        </ThemedText>
+      </ThemedView>
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
+        <ThemedText>
+          When you're ready, run{' '}
+          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
+          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
+          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
+          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
+        </ThemedText>
+      </ThemedView>
+    </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  filterContainer: {
-    marginBottom: 10,
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
+  stepContainer: {
+    gap: 8,
     marginBottom: 8,
-    paddingHorizontal: 10,
   },
-  applyButton: {
-    backgroundColor: '#3498db',
-    color: 'white',
-    padding: 10,
-    textAlign: 'center',
-    borderRadius: 5,
+  reactLogo: {
+    height: 378,
+    width: 690,
+    bottom: 0,
+    left: 0,
+    position: 'absolute',
+    justifyContent: 'center'
   },
 });

@@ -1,104 +1,95 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 
-const IMCCalculator = () => {
-  const [weight, setWeight] = useState<string>('');
-  const [height, setHeight] = useState<string>('');
-  const [result, setResult] = useState<string | null>(null);
+const MedidorIMC: React.FC = () => {
   const [nome, setNome] = useState<string>('');
+  const [peso, setPeso] = useState<number | string>('');
+  const [altura, setAltura] = useState<number | string>('');
+  const [resultado, setResultado] = useState<string>('');
+  const [errorPeso, setErrorPeso] = useState<string | null>(null);
+  const [errorAltura, setErrorAltura] = useState<string | null>(null);
 
-  const calculateIMC = () => {
-    const weightNum = parseFloat(weight);
-    const heightNum = parseFloat(height);
-
-    if (!isNaN(weightNum) && !isNaN(heightNum) && heightNum > 0) {
-      const imc = weightNum / (heightNum * heightNum);
-      setResult(imc.toFixed(2));
+  const calcularIMC = () => {
+    // Validar o peso e altura
+    if (isNaN(Number(peso)) || Number(peso) <= 0) {
+      setErrorPeso('Peso deve ser um número positivo.');
+      return;
     } else {
-      setResult('Por favor, insira valores válidos.');
+      setErrorPeso(null);
     }
+
+    if (isNaN(Number(altura)) || Number(altura) <= 0) {
+      setErrorAltura('Altura deve ser um número positivo.');
+      return;
+    } else {
+      setErrorAltura(null);
+    }
+
+    // Calcular IMC
+    const imc = Number(peso) / (Number(altura) * Number(altura));
+    let classificacao = '';
+
+    if (imc < 17) {
+      classificacao = 'Muito abaixo do peso';
+    } else if (imc >= 17 && imc < 18) {
+      classificacao = 'Abaixo do peso';
+    } else if (imc >= 18 && imc < 25) {
+      classificacao = 'Peso ideal';
+    } else if (imc >= 25 && imc < 30) {
+      classificacao = 'Acima do peso';
+    } else if (imc >= 30 && imc < 35) {
+      classificacao = 'Obesidade grau I. Procure um médico';
+    } else if (imc >= 35 && imc < 40) {
+      classificacao = 'Obesidade grau II. Procure um médico';
+    } else {
+      classificacao = 'Obesidade grau III. Procure um médico';
+    }
+
+    setResultado(`Seu IMC é: ${imc.toFixed(2)}. ${classificacao}`);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Calculadora de IMC</Text>
+    <div>
+      <h1>Medidor de IMC</h1>
+      <div>
+        <label>
+          Nome:
+          <input
+            type="text"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Peso (kg):
+          <input
+            type="number"
+            value={peso}
+            onChange={(e) => setPeso(e.target.value)}
+            placeholder="Peso em kg"
+          />
+        </label>
+        {errorPeso && <p style={{ color: 'red' }}>{errorPeso}</p>}
+      </div>
+      <div>
+        <label>
+          Altura (m):
+          <input
+            type="number"
+            step="0.01"
+            value={altura}
+            onChange={(e) => setAltura(e.target.value)}
+            placeholder="Altura em metros"
+          />
+        </label>
+        {errorAltura && <p style={{ color: 'red' }}>{errorAltura}</p>}
+      </div>
+      <button onClick={calcularIMC}>Calcular IMC</button>
 
-      {nome ? (
-        <Text style={styles.result}>{nome}</Text>
-      ) : (
-        <Text style={styles.result}></Text>
-      )}
-
-      <TextInput
-        style={styles.input}
-        placeholder="Nome"
-        value={nome}
-        onChangeText={setNome}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Peso (kg)"
-        keyboardType="numeric"
-        value={weight}
-        onChangeText={setWeight}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Altura (m)"
-        keyboardType="numeric"
-        value={height}
-        onChangeText={setHeight}
-      />
-
-      <Button title="Calcular" onPress={calculateIMC} />
-
-      {result && (
-        <Text style={styles.result}>
-          {isNaN(parseFloat(result))
-            ? result
-            : `Seu IMC é: ${result} (${getIMCClassification(parseFloat(result))})`}
-        </Text>
-      )}
-    </View>
+      {resultado && <p>{resultado}</p>}
+    </div>
   );
 };
 
-const getIMCClassification = (imc: number) => {
-  if (imc < 18.5) return 'baixo peso';
-  if (imc >= 18.5 && imc < 25) return 'peso adequado';
-  if (imc >= 25 && imc < 30) return 'sobrepeso';
-  return 'obesidade';
-};
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    padding: 50,
-    backgroundColor: '#fff',
-    height: '100vh',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 15,
-    paddingHorizontal: 10,
-    width: '30vw',
-  },
-  result: {
-    fontSize: 18,
-    textAlign: 'left',
-    marginTop: 20,
-  },
-});
-
-export default IMCCalculator;
+export default MedidorIMC;

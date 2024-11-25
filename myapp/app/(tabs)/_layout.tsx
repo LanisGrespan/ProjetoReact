@@ -26,27 +26,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explorar',
+          title: 'Explore',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='imc'
-        options={{
-          title: 'Calculadora de IMC',
-          tabBarIcon: ({color, focused}) => (
-            <TabBarIcon name={focused ? 'calculator' : 'calculator-outline'} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name='cadastro'
-        options={{
-          title: 'Cadastro de Usuário',
-          tabBarIcon: ({color, focused}) => (
-            <TabBarIcon name={focused ? 'people' : 'people-outline'} color={color} />
           ),
         }}
       />
