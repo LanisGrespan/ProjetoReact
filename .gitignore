@@ -1,2 +1,8 @@
+<<<<<<< HEAD
 .venv/
 *.pyc
+=======
+# Ignorar arquivos Python compilados
+.venv/
+*.pyc
+>>>>>>> be63cdd38ce853aae6803977a3f385a93c402991

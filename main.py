@@ -15,6 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+<<<<<<< HEAD
 class ImovelCreate(BaseModel):
     nome: str
     finalidade: tuple | None # alugar, comprar, permuta
@@ -31,12 +32,15 @@ class ImovelCreate(BaseModel):
 class ImovelRead(ImovelCreate):
     id: int
 
+=======
+>>>>>>> be63cdd38ce853aae6803977a3f385a93c402991
 class Usuario(BaseModel):
     nome: str
     idade: int
 class UsuarioRead(Usuario):
     id: int
 
+<<<<<<< HEAD
 class CRUD:
     caminho = "imoveis.json" # é possível usar crud.caminho = 'novo.json'
     def __init__(self, modo) -> None:
@@ -102,6 +106,19 @@ async def obter_itens():
     dados = crud.conexao()
     import json
     return json.loads(dados)
+=======
+# Simulando dados para a lista 
+
+dados = [
+    "id" 1, "nome" = "Item 1",
+    "id" 2, "nome" = "Item 2",
+    "id" 3, "nome" = "Item 3"
+]
+
+@app.get("/itens")
+async def obter_itens():
+    return dados
+>>>>>>> be63cdd38ce853aae6803977a3f385a93c402991
 
 @app.post("/usuarios")
 async def salvar_item(usuario: Usuario):
@@ -115,4 +132,8 @@ async def salvar_item(usuario: Usuario):
 
 if __name__ == "__main__":
     import uvicorn
+<<<<<<< HEAD
     uvicorn.run(app, host="0.0.0.0", port=8000)
+=======
+    uvicorn.run(app, host= "0.0.0.0", port=8000 )
+>>>>>>> be63cdd38ce853aae6803977a3f385a93c402991
